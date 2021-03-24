@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-alarm-clock',
@@ -7,7 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AlarmClockComponent implements OnInit {
 
-  constructor() { }
+  public now: Date = new Date();
+
+  constructor() { 
+    setInterval(()=>{
+      this.now = new Date();
+    }, 1)
+  }
 
   ngOnInit(): void {
   }

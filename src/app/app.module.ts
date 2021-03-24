@@ -4,11 +4,13 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AlarmClockComponent } from './alarm-clock/alarm-clock.component';
+import { AlarmComponent } from './alarm/alarm.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    AlarmClockComponent
+    AlarmClockComponent,
+    AlarmComponent
   ],
   imports: [
     BrowserModule,
