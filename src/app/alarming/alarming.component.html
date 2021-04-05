@@ -1,0 +1,17 @@
+<div *ngIf="alarm.state === 'alarming' " id="theAlarm">
+
+    <div>
+        <span class="alarm-title">{{ alarm.label }}</span>
+    </div>
+    <div>
+        <span class="alarm-time">{{ alarm.time.getHours() | number : '2.0-0'  }}:{{ alarm.time.getMinutes() | number : '2.0-0'  }}</span>
+    </div>
+    <div>
+        <button (click)="this.stopAlarm()">Stop</button>
+        <button (click)="this.snoozeAlarm()">Snooze</button>
+    </div>
+
+    <div>
+        <input type="number" [value]="alarm.snooze" (change)="changeSnoozeTime( $event )">
+    </div>
+</div>

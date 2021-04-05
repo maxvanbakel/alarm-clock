@@ -1,0 +1,28 @@
+<div *ngIf="alarm !== undefined && !alarm.enabled">
+
+    <input type="text" name="label" id="label" [value]="alarm.label"  (change)="setLabel( $event )" autofocus />
+
+    <br>
+
+    <input type="number" max="24" min="-1" name="hours" [value]="alarm.time.getHours() | number: '2.0-0'" (change)="setHours( $event )" />
+
+    <input type="number" max="60" min="-1" name="minutes" [value]="alarm.time.getMinutes() | number: '2.0-0'"  (change)="setMinutes( $event )" />
+
+    <div>
+        <input type="checkbox" [checked]="alarm.repeat" (change)="alarm.repeat = !alarm.repeat" />
+        <label>Herhalen</label>
+    </div>
+
+    <div *ngIf="alarm.repeat" class="set_days">
+        <ul>
+            <button *ngFor="let d of alarm.days; let i = index" (click)="alarm.days[i] = !alarm.days[i];" [class.checked]="d" value="]">{{ this.days[i] }}</button>
+                
+        </ul>
+    </div>
+
+    <br>
+
+    <input type="button" value="Opslaan" (click)="alarm.enabled = true; alarm.state = 'waiting'" />
+    <!-- <input type="button" value="Verwijderen" (click)="removeAlarm()" /> -->
+
+</div>

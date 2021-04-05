@@ -9,7 +9,42 @@ div.the_time{
     align-items: center;
     -webkit-justify-content: center;
     -webkit-align-items: center;
-    font-size: 10em;
-    font-family: Share-bold;
-    font-style: italic;
+    flex-flow:column;
+    -webkit-flex-flow:column;
+    
+    span{
+        font-size: 10em;
+        font-family: Share-bold;
+        font-style: italic;
+    }
+}
+
+#alarms{
+    #alarm{
+        &.editing{
+            opacity: .1;
+        }
+        &.alarming{
+            animation:goOff 1s cubic-bezier(0.19, 1, 0.22, 1);
+            animation-iteration-count:infinite;
+        }
+        &.snoozing{
+            background-color: yellow;
+        }
+        &:hover{
+            opacity: 1;
+        }
+    }
+}
+
+@keyframes goOff{
+    0%{
+        background-color: white;
+    }
+    50%{
+        background-color: red;
+    }
+    100%{
+        background-color: white;
+    }
 }
