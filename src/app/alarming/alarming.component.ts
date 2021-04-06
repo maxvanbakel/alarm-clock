@@ -21,9 +21,9 @@ export class AlarmingComponent implements OnInit {
     this.alarm.state = this.alarm.repeat ? AlarmState.waiting : AlarmState.stopped;
   }
   snoozeAlarm() {
-    this.alarm.isSnoozed = true;
-    this.alarm.setAlarmSnooze( new Date() );
+    this.alarm.setAlarmSnooze(  );
   }
+  
   changeSnoozeTime( e:any ){
     this.alarm.snooze = e.target.value
     this.snoozeTime = e.target.value

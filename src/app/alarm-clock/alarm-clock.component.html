@@ -11,8 +11,17 @@
     <div id="alarm" *ngFor="let a of alarms; let i = index;" ngClass="{{a.state}}">
         
         <span>{{ a.label }}</span><br>
-        <div *ngIf="a.state !== 'snoozing'">{{ a.time.getHours() | number : '2.0-0' }}:{{ a.time.getMinutes() | number : '2.0-0'  }}</div>
-        <div  *ngIf="a.state === 'snoozing'">{{ a.snoozeTime.getHours() | number : '2.0-0' }}:{{ a.snoozeTime.getMinutes() | number : '2.0-0' }}</div>
+
+        <div *ngIf="a.state !== 'snoozing'">
+            {{ a.time.getHours() | number : '2.0-0' }}:
+            {{ a.time.getMinutes() | number : '2.0-0'  }}
+        </div>
+
+        <div  *ngIf="a.state === 'snoozing'">
+            {{ a.snoozeTime.getHours() | number : '2.0-0' }}:   
+            {{ a.snoozeTime.getMinutes() | number : '2.0-0' }}
+        </div>
+
         <div>{{ a.state }}</div>
         
         <div *ngIf="a.repeat">
@@ -20,8 +29,8 @@
                 <span *ngIf="d">{{ days[i] }}</span>
             </div>
         </div>
-        <input type="button" value="Bewerk" (click)="a.enabled = false; this.currentAlarm = a; this.currentAlarm.state = 'editing' " />
-        <input type="button" value="Verwijderen" (click)="removeAlarm( i )" />
+        <input type="button" value="Bewerk" (click)="editAlarm(a)" />
+        
        
         <br>
     </div>
@@ -30,7 +39,7 @@
 
 
 
-<app-set-alarm [alarm]="this.currentAlarm" [days]="this.days"></app-set-alarm>
+<app-set-alarm [alarms]="this.alarms" [alarm]="this.currentAlarm" [days]="this.days"></app-set-alarm>
 
 
 <button (click)="createAlarm()"> add alarm </button>

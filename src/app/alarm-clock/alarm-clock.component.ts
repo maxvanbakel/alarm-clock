@@ -1,5 +1,5 @@
 import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
-import { Alarm } from "../alarm";
+import { Alarm, AlarmState } from "../alarm";
 
 @Component({
   selector: 'app-alarm-clock',
@@ -40,27 +40,24 @@ export class AlarmClockComponent implements OnInit {
     this.currentAlarm = a
   }
 
-  removeAlarm( index:number ){
-
-    if( this.alarms[index] === this.alarming ){
-      this.alarming = undefined
-    }
-    if(this.alarms[index] === this.currentAlarm){
-      this.currentAlarm = undefined;
-    }
-    
-    this.alarms.splice( index, 1 )
-
-  }
 
   checkTheAlarms(){
     for (let i = 0; i < this.alarms.length; i++) {
       const alarm = this.alarms[i];
 
-      if( alarm.alarming( this.now ) ){
+      if( alarm.isEnabled() ){
+        alarm.setAlarmState( this.now );
+      }
+    
+      if( alarm.state === 'alarming' ){
         this.alarming = alarm;
       }
     }
+  }
+
+  public editAlarm(clickedAlarm: Alarm): void{
+    this.currentAlarm = clickedAlarm; 
+    this.currentAlarm.state = AlarmState.editing; 
   }
 
 

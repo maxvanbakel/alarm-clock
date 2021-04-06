@@ -3,9 +3,13 @@ export enum AlarmState {
     waiting = 'waiting',
     snoozing = 'snoozing',
     alarming = 'alarming',
-    stopped = 'stopped'
+    stopped = 'stopped',
+    disabled = 'disabled'
 }
 
+/**
+ * @Param Alarm Class sets a label, time, repeater in week days or snooze. 
+ */
 export class Alarm {
 
     public label: String = 'Nieuw Alarm';
@@ -14,11 +18,24 @@ export class Alarm {
     public days: any = [false, false, false, false, false, false, false];
     public snooze: number = 3;
     public state: AlarmState = AlarmState.editing;
-    public tempAlarmTime: Date = new Date();
-    public enabled?: Boolean;
-    public isSnoozed: Boolean = false;
     public snoozeTime: Date = this.time;     
 
+    /**
+     * 
+     * @returns true if the alarm.state is not disabled.
+     */
+    public isEnabled(): boolean{
+        if ( this.state === AlarmState.disabled){
+            return false
+        }
+        return true
+    }
+
+    /**
+     * 
+     * @param day of the week wil be checked.
+     * @returns 
+     */
     public checkAlarmDay( day: number ): Boolean {
         if( this.repeat )
         {
@@ -27,71 +44,83 @@ export class Alarm {
         return true;
     }
 
+    /**
+     * 
+     * @param time first date object
+     * @param dateToCheck second date object
+     * @returns true if hours and minutes are the same and clock is eneabled. 
+     */
     public checkSetTime( time: Date, dateToCheck: Date ): Boolean {
         if( dateToCheck.getHours() == time.getHours() && 
-        this.enabled && 
-        dateToCheck.getMinutes() == time.getMinutes() )
+            this.isEnabled() && 
+            dateToCheck.getMinutes() == time.getMinutes() )
         {
-
-            this.tempAlarmTime = new Date( this.time.getTime() + (this.snooze * 1000 ) )
             return true
         }
         return false;
     }
    
 
-    private isAlarmStopped(time: Date): void {
-        if( this.state === AlarmState.stopped && 
-            !this.checkSetTime( this.time, time ))
-            {
-                this.state = AlarmState.waiting
-            }
-    }
-
-    private isAlarmSnoozed(time: Date): void {
+    /**
+     *  Check if the alarm can be alarmed in snoozing state
+     * @param time is used to check the snoozetime
+     * @returns 
+     */
+    private isAlarmSnoozeAlarming(time: Date): boolean {
         if( this.state === AlarmState.snoozing && 
-            this.enabled && this.checkSetTime( this.snoozeTime, time ) && 
-            this.checkAlarmDay( time.getDay() ) )
+            this.isEnabled() && this.checkSetTime( this.snoozeTime, time ) )
             {
-                this.state = AlarmState.alarming;
+                return true   
             }
-        
+        return false
     }
 
-    private isAlarmAlarming(time: Date): void {
-        if( this.state !== AlarmState.alarming && 
-            this.enabled && 
-            this.checkSetTime( this.time, time ) && 
-            this.checkAlarmDay( time.getDay() ) )
+    /**
+     * Check if the alarm can be alarmed in waiting state
+     * @param time is used to check the alarmTime
+     * @returns 
+     */
+    private isAlarmAlarming(time: Date): boolean {
+        if( this.state === AlarmState.waiting && 
+            this.checkSetTime( this.time, time )   )
             {
-                this.state = AlarmState.alarming;
+                return true
             }
+            return false
     }
 
-    public setAlarmSnooze ( time: Date): void {
-        let m = Number(time.getMinutes()) + Number(this.snooze);
-        let snuz = new Date( time )
-        snuz.setMinutes( m )
-        this.snoozeTime = snuz
-        this.isSnoozed = false
+    /**
+     * Set new snooze time for the alarm
+     */
+    public setAlarmSnooze ( ): void {
+        let m = Number(new Date().getMinutes()) + Number(this.snooze);
+        this.snoozeTime.setMinutes( m )
         this.state = AlarmState.snoozing
     }
 
-/**
- * 
- * Opsplitsen in verschillende methodes. 
- */
-    public alarming( time:any ): boolean{
-
-        // this.setAlarmSnooze( time );
-            
-        this.isAlarmStopped( time );
-
-        this.isAlarmSnoozed( time );
-
-        this.isAlarmAlarming( time );
-
-        return true;
+    /**
+     * Stops the alarm if not repeated
+     */
+    public stopAlarm(): void {
+        this.state = AlarmState.stopped;
+        if( this.repeat ){
+            setTimeout(() => {
+                this.state = AlarmState.waiting
+            }, 1000)
+        }
     }
 
+    /**
+     * This makes the alarm go off at the appropiate time and within the appropiate state.
+     * @param time 
+     */
+    public setAlarmState( time:any ): void{
+        
+        if( this.checkAlarmDay( time.getDay() ) &&
+            this.isAlarmSnoozeAlarming( time ) || 
+            this.isAlarmAlarming( time ) )
+            {
+                this.state = AlarmState.alarming;
+            }
+    }
 }

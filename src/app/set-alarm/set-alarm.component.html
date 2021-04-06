@@ -1,4 +1,4 @@
-<div *ngIf="alarm !== undefined && !alarm.enabled">
+<div *ngIf="alarm.state === 'editing'">
 
     <input type="text" name="label" id="label" [value]="alarm.label"  (change)="setLabel( $event )" autofocus />
 
@@ -22,7 +22,9 @@
 
     <br>
 
-    <input type="button" value="Opslaan" (click)="alarm.enabled = true; alarm.state = 'waiting'" />
+    <input type="button" value="Verwijderen" (click)="removeAlarm( alarms.indexOf( alarm ) )" />
+    <button (click)="disableAlarm()">Disable</button>
+    <input type="button" value="Opslaan" (click)="saveAlarm()" />
     <!-- <input type="button" value="Verwijderen" (click)="removeAlarm()" /> -->
 
 </div>

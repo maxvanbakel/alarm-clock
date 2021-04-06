@@ -1,5 +1,5 @@
 import { Component, OnInit, EventEmitter, Output, Input } from '@angular/core';
-import { Alarm } from '../alarm';
+import { Alarm, AlarmState } from '../alarm';
 
 
 
@@ -11,9 +11,11 @@ import { Alarm } from '../alarm';
 export class SetAlarmComponent implements OnInit {
   
 
+  @Input() alarms: Alarm[] = [];
   @Input() alarm: any;
   @Input() days: any;
 
+  alarmStates?: AlarmState;
   
 
   constructor() { }
@@ -50,6 +52,19 @@ export class SetAlarmComponent implements OnInit {
 
   }
 
+  removeAlarm( index: number ){
+    
+    this.alarm.state = AlarmState.disabled;
+    this.alarms.splice( index, 1 )
+
+  }
+
+  disableAlarm() {
+    this.alarm.state = AlarmState.disabled;
+  }
  
+  saveAlarm(){
+    this.alarm.state = AlarmState.waiting;
+  }
 
 }
