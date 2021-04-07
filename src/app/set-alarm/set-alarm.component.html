@@ -1,4 +1,4 @@
-<div *ngIf="alarm.state === 'editing'">
+<div *ngIf="alarm !== undefined && alarm.state === 'editing'">
 
     <input type="text" name="label" id="label" [value]="alarm.label"  (change)="setLabel( $event )" autofocus />
 

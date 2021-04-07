@@ -30,8 +30,19 @@
               "src/favicon.ico",
               "src/assets"
             ],
+            "extractCss": true,
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              {
+                "input": "src/client-a-styles.scss",
+                "bundleName": "client-a",
+                "inject": false
+              },
+              {
+                "input": "src/client-b-styles.scss",
+                "bundleName": "client-b",
+                "inject": false
+              }
             ],
             "scripts": []
           },
